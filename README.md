@@ -44,4 +44,4 @@ SkyCast is a modern Android weather app following **Clean Architecture** princip
 - User can type a city name and search it.
 - Results are displayed in a list with city name, state, and country.
 
-   <img src="assets/search_screen.png" width="300"/>
+   <img src="assets/search_screen1.png" width="300"/>  <img src="assets/search_screen2.png" width="300"/>
