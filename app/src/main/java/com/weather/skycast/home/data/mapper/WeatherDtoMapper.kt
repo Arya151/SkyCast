@@ -41,9 +41,8 @@ fun List<WeatherItemDto>.toDailyForecast(): List<ForecastItem> {
 
             ForecastItem(
                 dayLabel = when (index) {
-                    0 -> "Yesterday"
-                    1 -> "Today"
-                    2 -> "Tomorrow"
+                    0 -> "Today"
+                    1 -> "Tomorrow"
                     else -> getDayLabel(entry.value.first().dt)
                 },
                 date = entry.key,

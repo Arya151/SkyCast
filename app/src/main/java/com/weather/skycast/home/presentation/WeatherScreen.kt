@@ -44,7 +44,7 @@ fun WeatherScreen(
         )
         if (state.forecastList.size > 2) {
             Icon(
-                painter = painterResource(id = state.forecastList.get(1).iconRes),
+                painter = painterResource(id = state.forecastList.get(0).iconRes),
                 contentDescription = "Weather Icon",
                 modifier = Modifier
                     .size(98.dp),

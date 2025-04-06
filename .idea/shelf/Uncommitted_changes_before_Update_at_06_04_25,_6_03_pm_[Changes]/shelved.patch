@@ -1,0 +1,113 @@
+Index: app/src/main/java/com/weather/skycast/home/presentation/HomeScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.weather.skycast.home.presentation\n\nimport androidx.activity.compose.BackHandler\nimport androidx.activity.compose.LocalActivity\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Row\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.width\nimport androidx.compose.material.icons.Icons\nimport androidx.compose.material.icons.filled.LocationOn\nimport androidx.compose.material.icons.filled.Search\nimport androidx.compose.material3.Icon\nimport androidx.compose.material3.IconButton\nimport androidx.compose.material3.Text\nimport androidx.compose.runtime.Composable\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.graphics.Brush\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.tooling.preview.Preview\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport com.weather.skycast.R\nimport com.weather.skycast.home.domain.model.CitySearch\nimport com.weather.skycast.home.domain.model.ForecastItem\nimport com.weather.skycast.home.presentation.component.HomeAction\nimport com.weather.skycast.home.presentation.component.HomeUiState\n\n@Composable\nfun HomeScreen(\n    state: HomeUiState,\n    onAction: (HomeAction) -> Unit\n) {\n\n    val activity = LocalActivity.current\n\n    Column(\n        modifier = Modifier\n            .background(\n                brush = Brush.linearGradient(\n                    colors = state.gradientColors\n                )\n            )\n            .fillMaxSize()\n            .padding(top = 32.dp, start = 16.dp, end = 16.dp)\n    ) {\n\n        // Top Row: City + Search\n        Row(\n            modifier = Modifier\n                .fillMaxWidth(),\n            horizontalArrangement = Arrangement.SpaceBetween,\n            verticalAlignment = Alignment.CenterVertically\n        ) {\n            if (state.isSearching) {\n                SearchScreen(\n                    state = state,\n                    onAction = onAction\n                )\n            } else {\n                Row(\n                    verticalAlignment = Alignment.CenterVertically\n                ) {\n                    Icon(\n                        imageVector = Icons.Default.LocationOn,\n                        contentDescription = \"Location\",\n                        tint = Color.White\n                    )\n                    Spacer(modifier = Modifier.width(8.dp))\n                    Text(\n                        text = state.cityName,\n                        fontSize = 24.sp,\n                        fontWeight = FontWeight.Bold,\n                        color = Color.White\n                    )\n                }\n            }\n\n            IconButton(\n                onClick = { onAction(HomeAction.OnSearchClick) }\n            ) {\n                Icon(Icons.Default.Search, contentDescription = \"Search\", tint = Color.White)\n            }\n        }\n\n        if (!state.isSearching) {\n            WeatherScreen(\n                state = state,\n                onAction = onAction\n            )\n        }\n\n    }\n    BackHandler {\n        if (state.isSearching) {\n            onAction(HomeAction.OnBackPressed)\n        } else {\n            activity?.finish()\n        }\n    }\n}\n\n\n@Preview(showBackground = true)\n@Composable\nfun PreviewHomeScreen() {\n    val mockState = HomeUiState(\n        cityName = \"Mumbai\",\n        temperature = \"30\",\n        feelsLike = \"33\",\n        pressure = \"1010\",\n        seaLevel = \"7\",\n        isSearching = false,\n        filteredCities = listOf(\n            CitySearch(\n                name = \"New York\",\n                state = \"New York\",\n                country = \"US\",\n                lat = 40.7128,\n                lon = -74.0060\n            ),\n            CitySearch(\n                name = \"London\",\n                state = \"England\",\n                country = \"GB\",\n                lat = 51.5074,\n                lon = -0.1278\n            ),\n            CitySearch(\n                name = \"Tokyo\",\n                state = \"Tokyo\",\n                country = \"JP\",\n                lat = 35.6895,\n                lon = 139.6917\n            ),\n            CitySearch(\n                name = \"Mumbai\",\n                state = \"Maharashtra\",\n                country = \"IN\",\n                lat = 19.0760,\n                lon = 72.8777\n            ),\n            CitySearch(\n                name = \"Paris\",\n                state = \"Île-de-France\",\n                country = \"FR\",\n                lat = 48.8566,\n                lon = 2.3522\n            )\n        ),\n        forecastList = listOf(\n            ForecastItem(\"Yesterday\", \"Apr 5\", \"29\", R.drawable.ic_sunny),\n            ForecastItem(\"Today\", \"Apr 6\", \"30\", R.drawable.ic_cloudy),\n            ForecastItem(\"Tomorrow\", \"Apr 7\", \"31\", R.drawable.ic_rainy),\n            ForecastItem(\"Apr 8\", \"Apr 8\", \"32\", R.drawable.ic_sunny)\n        )\n    )\n\n    HomeScreen(\n        state = mockState,\n        onAction = {}, // no-op for preview,\n    )\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/weather/skycast/home/presentation/HomeScreen.kt b/app/src/main/java/com/weather/skycast/home/presentation/HomeScreen.kt
+--- a/app/src/main/java/com/weather/skycast/home/presentation/HomeScreen.kt	(revision e4d897c4e00917e9299370647ef8fa45e5767bdc)
++++ b/app/src/main/java/com/weather/skycast/home/presentation/HomeScreen.kt	(date 1743940812666)
+@@ -13,6 +13,7 @@
+ import androidx.compose.foundation.layout.width
+ import androidx.compose.material.icons.Icons
+ import androidx.compose.material.icons.filled.LocationOn
++import androidx.compose.material.icons.filled.Refresh
+ import androidx.compose.material.icons.filled.Search
+ import androidx.compose.material3.Icon
+ import androidx.compose.material3.IconButton
+@@ -82,11 +83,21 @@
+                 }
+             }
+ 
+-            IconButton(
+-                onClick = { onAction(HomeAction.OnSearchClick) }
+-            ) {
+-                Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White)
++            Row(
++                verticalAlignment = Alignment.CenterVertically
++            ) {
++                IconButton(
++                    onClick = { onAction(HomeAction.OnSearchClick) }
++                ) {
++                    Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White)
++                }
++                IconButton(
++                    onClick = { onAction(HomeAction.OnRefreshClick) }
++                ) {
++                    Icon(Icons.Default.Refresh, contentDescription = "Refresh", tint = Color.White)
++                }
+             }
++
+         }
+ 
+         if (!state.isSearching) {
+Index: app/src/main/java/com/weather/skycast/home/presentation/component/HomeAction.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.weather.skycast.home.presentation.component\n\nsealed class HomeAction {\n    data class OnSearchTextChange(val text: String) : HomeAction()\n    object OnSearchClick : HomeAction()\n    data class SubmitSearch(val city: String) : HomeAction()\n    data class OnCitySelected(val lat: Double, val lon: Double) : HomeAction()\n    object OnBackPressed : HomeAction()\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/weather/skycast/home/presentation/component/HomeAction.kt b/app/src/main/java/com/weather/skycast/home/presentation/component/HomeAction.kt
+--- a/app/src/main/java/com/weather/skycast/home/presentation/component/HomeAction.kt	(revision e4d897c4e00917e9299370647ef8fa45e5767bdc)
++++ b/app/src/main/java/com/weather/skycast/home/presentation/component/HomeAction.kt	(date 1743940812674)
+@@ -3,6 +3,7 @@
+ sealed class HomeAction {
+     data class OnSearchTextChange(val text: String) : HomeAction()
+     object OnSearchClick : HomeAction()
++    object OnRefreshClick : HomeAction()
+     data class SubmitSearch(val city: String) : HomeAction()
+     data class OnCitySelected(val lat: Double, val lon: Double) : HomeAction()
+     object OnBackPressed : HomeAction()
+Index: app/src/main/java/com/weather/skycast/home/presentation/HomeViewmodel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.weather.skycast.home.presentation\n\nimport android.app.Activity\nimport android.util.Log\nimport androidx.compose.ui.platform.LocalContext\nimport androidx.lifecycle.ViewModel\nimport androidx.lifecycle.viewModelScope\nimport com.weather.skycast.core.data.remote.Resource\nimport com.weather.skycast.core.domain.location.LocationTracker\nimport com.weather.skycast.core.presentation.getGradientForWeather\nimport com.weather.skycast.home.domain.repository.WeatherRepository\nimport com.weather.skycast.home.presentation.component.HomeAction\nimport com.weather.skycast.home.presentation.component.HomeUiState\nimport dagger.hilt.android.lifecycle.HiltViewModel\nimport kotlinx.coroutines.Dispatchers\nimport kotlinx.coroutines.flow.MutableStateFlow\nimport kotlinx.coroutines.flow.update\nimport kotlinx.coroutines.launch\nimport javax.inject.Inject\n\n@HiltViewModel\nclass HomeViewModel @Inject constructor(\n    private val repository: WeatherRepository,\n    private val locationTracker: LocationTracker\n) : ViewModel() {\n\n    private val _state = MutableStateFlow(HomeUiState())\n    val state = _state\n\n    fun onAction(action: HomeAction) {\n        when (action) {\n            is HomeAction.OnSearchClick -> {\n                _state.value = _state.value.copy(isSearching = !_state.value.isSearching)\n            }\n\n            is HomeAction.OnSearchTextChange -> {\n                _state.value = _state.value.copy(\n                    searchText = action.text,\n                    isLoading = false,\n                    isSearching = true\n                )\n            }\n\n            is HomeAction.SubmitSearch -> {\n                loadCities(action.city)\n            }\n\n            is HomeAction.OnCitySelected -> {\n                viewModelScope.launch(Dispatchers.IO) {\n                    loadWeather(lat = action.lat, lon = action.lon)\n                    _state.value = _state.value.copy(\n                        searchText = \"\",\n                        isSearching = false\n                    )\n                }\n            }\n\n            is HomeAction.OnBackPressed -> {\n                if (_state.value.isSearching) {\n                    _state.update {\n                        it.copy(\n                            isSearching = false\n                        )\n                    }\n                }\n            }\n        }\n    }\n\n    fun loadWeatherInfo() {\n        Log.d(\"viewmodel\", \"loadWeatherInfo called\")\n        viewModelScope.launch {\n            _state.update {\n                it.copy(\n                    isLoading = true,\n                    error = \"\"\n                )\n            }\n            locationTracker.getCurrentLocation()?.let { location ->\n                loadWeather(location.latitude, location.longitude)\n            } ?: run {\n                Log.d(\"viewmodel\", \"loadWeatherInfo failed \")\n\n                _state.update {\n                    it.copy(\n                        isLoading = false,\n                        filteredCities = emptyList(),\n                        error = \"Couldn't retrieve location. Make sure to grant permission and enable GPS \"\n                    )\n                }\n            }\n        }\n    }\n\n    private suspend fun loadWeather(lat: Double, lon: Double) {\n        repository.getWeatherData(lat, lon).collect { result ->\n            when (result) {\n                is Resource.Success -> {\n                    val data = result.data\n                    _state.update {\n                        Log.d(\"viewmodel\", \"loadWeatherInfo success - $data\")\n\n                        it.copy(\n                            cityName = data?.city ?: \"\",\n                            temperature = (data?.temp ?: \"-\").toString(),\n                            feelsLike = (data?.feelsLike ?: \"-\").toString(),\n                            pressure = (data?.pressure ?: \"-\").toString(),\n                            seaLevel = (data?.seaLevel ?: \"-\").toString(),\n                            forecastList = data?.forecast ?: emptyList(),\n                            gradientColors = getGradientForWeather(data?.temp ?: -1),\n                            isLoading = false,\n                            error = \"\"\n                        )\n                    }\n                }\n\n                is Resource.Error -> {\n                    _state.update {\n                        it.copy(\n                            isLoading = false,\n                            filteredCities = emptyList(),\n                            error = result.message ?: \"Something went wrong...\",\n                        )\n                    }\n                }\n\n                is Resource.Loading -> {\n                    _state.update {\n                        it.copy(\n                            forecastList = emptyList(),\n                            isLoading = true,\n                            error = \"\"\n                        )\n                    }\n                }\n            }\n        }\n\n    }\n\n    private fun loadCities(city: String) {\n        viewModelScope.launch {\n            _state.update {\n                it.copy(\n                    error = \"\"\n                )\n            }\n            repository.getCities(city = city).collect { result ->\n                when (result) {\n                    is Resource.Error -> {\n                        _state.update {\n                            it.copy(\n                                filteredCities = emptyList(),\n                                error = result.message ?: \"Something went wrong\",\n                            )\n                        }\n                    }\n\n                    is Resource.Loading -> {\n                        _state.update {\n                            it.copy(\n                                error = \"\",\n                                filteredCities = emptyList()\n                            )\n                        }\n                    }\n\n                    is Resource.Success -> {\n                        val data = result.data\n                        _state.update {\n                            it.copy(\n                                error = \"\",\n                                filteredCities = data ?: emptyList(),\n                            )\n                        }\n                    }\n                }\n            }\n\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/weather/skycast/home/presentation/HomeViewmodel.kt b/app/src/main/java/com/weather/skycast/home/presentation/HomeViewmodel.kt
+--- a/app/src/main/java/com/weather/skycast/home/presentation/HomeViewmodel.kt	(revision e4d897c4e00917e9299370647ef8fa45e5767bdc)
++++ b/app/src/main/java/com/weather/skycast/home/presentation/HomeViewmodel.kt	(date 1743940972658)
+@@ -1,8 +1,5 @@
+ package com.weather.skycast.home.presentation
+ 
+-import android.app.Activity
+-import android.util.Log
+-import androidx.compose.ui.platform.LocalContext
+ import androidx.lifecycle.ViewModel
+ import androidx.lifecycle.viewModelScope
+ import com.weather.skycast.core.data.remote.Resource
+@@ -64,11 +61,14 @@
+                     }
+                 }
+             }
++
++            is HomeAction.OnRefreshClick -> {
++                loadWeatherInfo()
++            }
+         }
+     }
+ 
+     fun loadWeatherInfo() {
+-        Log.d("viewmodel", "loadWeatherInfo called")
+         viewModelScope.launch {
+             _state.update {
+                 it.copy(
+@@ -79,7 +79,6 @@
+             locationTracker.getCurrentLocation()?.let { location ->
+                 loadWeather(location.latitude, location.longitude)
+             } ?: run {
+-                Log.d("viewmodel", "loadWeatherInfo failed ")
+ 
+                 _state.update {
+                     it.copy(
+@@ -98,7 +97,6 @@
+                 is Resource.Success -> {
+                     val data = result.data
+                     _state.update {
+-                        Log.d("viewmodel", "loadWeatherInfo success - $data")
+ 
+                         it.copy(
+                             cityName = data?.city ?: "",
