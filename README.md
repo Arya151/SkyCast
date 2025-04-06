@@ -6,7 +6,7 @@ SkyCast is a modern Android weather app following **Clean Architecture** princip
 
 ## 🌤 Features
 
-- Current weather and 4-day forecast
+- Current weather and 3-day forecast
 - City search with autocomplete
 - Dynamic gradients based on weather conditions
 - Offline access via Room DB
@@ -37,6 +37,7 @@ SkyCast is a modern Android weather app following **Clean Architecture** princip
 - Shows a 4-day forecast section.
 - Has a gradient background that dynamically changes based on weather condition.
 - Allows user to trigger location-based weather data fetching.
+- Includes a refresh button to manually refresh the weather data.
 
   <img src="app/src/assets/home_screen1.png" width="250"/>  <img src="app/src/assets/home_screen2.png" width="250"/>  <img src="app/src/assets/home_screen3.png" width="250"/>
 
