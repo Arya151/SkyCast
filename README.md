@@ -38,7 +38,7 @@ SkyCast is a modern Android weather app following **Clean Architecture** princip
 - Has a gradient background that dynamically changes based on weather condition.
 - Allows user to trigger location-based weather data fetching.
 
-  <img src="app/src/assets/home_screen1.png" width="300"/>  <img src="app/src/assets/home_screen2.png" width="300"/>  <img src="app/src/assets/home_screen3.png" width="300"/>
+  <img src="app/src/assets/home_screen1.png" width="250"/>  <img src="app/src/assets/home_screen2.png" width="250"/>  <img src="app/src/assets/home_screen3.png" width="250"/>
 
 ### 🔍 Search Screen
 - User can type a city name and search it.
