@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -82,11 +83,21 @@ fun HomeScreen(
                 }
             }
 
-            IconButton(
-                onClick = { onAction(HomeAction.OnSearchClick) }
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White)
+                IconButton(
+                    onClick = { onAction(HomeAction.OnSearchClick) }
+                ) {
+                    Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White)
+                }
+                IconButton(
+                    onClick = { onAction(HomeAction.OnRefreshClick) }
+                ) {
+                    Icon(Icons.Default.Refresh, contentDescription = "Refresh", tint = Color.White)
+                }
             }
+
         }
 
         if (!state.isSearching) {

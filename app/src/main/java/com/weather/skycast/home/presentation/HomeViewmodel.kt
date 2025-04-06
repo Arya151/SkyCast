@@ -1,8 +1,5 @@
 package com.weather.skycast.home.presentation
 
-import android.app.Activity
-import android.util.Log
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weather.skycast.core.data.remote.Resource
@@ -64,11 +61,14 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             }
+
+            is HomeAction.OnRefreshClick -> {
+                loadWeatherInfo()
+            }
         }
     }
 
     fun loadWeatherInfo() {
-        Log.d("viewmodel", "loadWeatherInfo called")
         viewModelScope.launch {
             _state.update {
                 it.copy(
@@ -79,7 +79,6 @@ class HomeViewModel @Inject constructor(
             locationTracker.getCurrentLocation()?.let { location ->
                 loadWeather(location.latitude, location.longitude)
             } ?: run {
-                Log.d("viewmodel", "loadWeatherInfo failed ")
 
                 _state.update {
                     it.copy(
@@ -98,7 +97,6 @@ class HomeViewModel @Inject constructor(
                 is Resource.Success -> {
                     val data = result.data
                     _state.update {
-                        Log.d("viewmodel", "loadWeatherInfo success - $data")
 
                         it.copy(
                             cityName = data?.city ?: "",
